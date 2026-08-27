@@ -7,7 +7,7 @@ import { createServerApplication } from './app.js';
 
 dotenv.config({path: '.env'});
 
-const db = drizzle(process.env.DATABASE_URL as string);
+export const db = drizzle(process.env.DATABASE_URL as string);
 
 const PORT=process.env.PORT || 8000;
 
