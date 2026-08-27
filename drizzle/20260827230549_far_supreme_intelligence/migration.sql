@@ -1,0 +1,1 @@
+ALTER TABLE "users" ADD COLUMN "code_hash" varchar(255);

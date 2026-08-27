@@ -32,6 +32,10 @@ class ApiResponse {
             data,
         });
     }
+
+    static redirect<T>(res: Response, url: string) {
+        return res.redirect(url);
+    }
 }
 
 export default ApiResponse
