@@ -10,13 +10,16 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         /* ===== Reset & Base ===== */
-        *, *::before, *::after {
+        *,
+        *::before,
+        *::after {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
-        html, body {
+        html,
+        body {
             height: 100%;
             font-family: 'Inter', system-ui, -apple-system, sans-serif;
             background: #0b0f19;
@@ -55,8 +58,15 @@
         }
 
         @keyframes card-enter {
-            from { opacity: 0; transform: translateY(16px) scale(.97); }
-            to   { opacity: 1; transform: translateY(0) scale(1); }
+            from {
+                opacity: 0;
+                transform: translateY(16px) scale(.97);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
         }
 
         /* ===== Header ===== */
@@ -96,9 +106,19 @@
         }
 
         @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25%      { transform: translateX(-6px); }
-            75%      { transform: translateX(6px); }
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            25% {
+                transform: translateX(-6px);
+            }
+
+            75% {
+                transform: translateX(6px);
+            }
         }
 
         /* ===== Input Group ===== */
@@ -168,7 +188,7 @@
             content: '';
             position: absolute;
             inset: 0;
-            background: linear-gradient(135deg, rgba(255,255,255,.12), transparent 60%);
+            background: linear-gradient(135deg, rgba(255, 255, 255, .12), transparent 60%);
             opacity: 0;
             transition: opacity .25s;
         }
@@ -203,7 +223,9 @@
         }
 
         @keyframes spin {
-            to { transform: rotate(360deg); }
+            to {
+                transform: rotate(360deg);
+            }
         }
 
         /* ===== Footer ===== */
@@ -262,49 +284,49 @@
                 </div>
                 <button type="submit" class="btn" id="submitBtn">
                     <span id="spinner" class="spinner"></span>
-                    <span id="btnTxt" >Log in</span>
+                    <span id="btnTxt">Log in</span>
                 </button>
             </form>
             <div class="footer">
-                <p>Don't have an account? <a href="./signup.htm">Register</a></p>
+                <p>Don't have an account? <a href="./signup.html">Register</a></p>
             </div>
         </div>
     </div>
 
     <script>
         const form = document.getElementById('form');
-        const submitBtn=document.getElementById('submitBtn');
-        const spinner=document.getElementById('spinner');
-        const btnTxt=document.getElementById('btnTxt');
-        const errormsg=document.getElementById('errormsg');
+        const submitBtn = document.getElementById('submitBtn');
+        const spinner = document.getElementById('spinner');
+        const btnTxt = document.getElementById('btnTxt');
+        const errormsg = document.getElementById('errormsg');
 
 
-        function showError(message){
-            errormsg.textContent=message;
-            errormsg.style.display='block';
+        function showError(message) {
+            errormsg.textContent = message;
+            errormsg.style.display = 'block';
         }
 
-        function hideError(){
-            errormsg.style.display='none';
+        function hideError() {
+            errormsg.style.display = 'none';
         }
 
-        function setLoading(isLoding){
-            submitBtn.disabled=isLoding;
+        function setLoading(isLoding) {
+            submitBtn.disabled = isLoding;
 
-            spinner.style.display=isLoding ? 'block' : 'none';
-            btnTxt.style.display=isLoding ? 'none' : 'block';
+            spinner.style.display = isLoding ? 'block' : 'none';
+            btnTxt.style.display = isLoding ? 'none' : 'block';
         }
 
-        function hideSuccess(){
-            successmsg.style.display='none';
+        function hideSuccess() {
+            successmsg.style.display = 'none';
         }
 
-        form.addEventListener('submit', async(e) => {
+        form.addEventListener('submit', async (e) => {
             e.preventDefault();
-            const email=document.getElementById('email').value;
-            const password=document.getElementById('password').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
 
-            if(!email || !password){
+            if (!email || !password) {
                 showError('Please enter email and password');
                 return;
             }
@@ -313,37 +335,37 @@
             hideError();
 
             try {
-                const res=await fetch(`${window.location.origin}/api/auth/login`,
-                {
-                    method:'POST',
-                    headers:{'Content-Type':'application/json'},
-                    body:JSON.stringify({
-                        email,
-                        password,
-                        client_id:params.get('client_id'),
-                        redirect_uri:params.get('redirect_uri'),
-                        scope:params.get('scope'),
-                        state:params.get('state')
-                    })
-                }
-            );
+                const res = await fetch(`${window.location.origin}/api/auth/login`,
+                    {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            email,
+                            password,
+                            client_id: params.get('client_id'),
+                            redirect_uri: params.get('redirect_uri'),
+                            scope: params.get('scope'),
+                            state: params.get('state')
+                        })
+                    }
+                );
 
-                const data=await res.json();
-                
-                if(!res.ok){
+                const data = await res.json();
+
+                if (!res.ok) {
                     showError(data.message || 'Login failed');
-                }else if(data.redirect){
-                    window.location.href=data.redirect; 
+                } else if (data.redirect) {
+                    window.location.href = data.redirect;
                 }
 
             } catch (error) {
                 showError('An error occurred. Please try again.');
-            }finally{
+            } finally {
                 setLoading(false);
             }
 
-            
-            
+
+
         })
 
 

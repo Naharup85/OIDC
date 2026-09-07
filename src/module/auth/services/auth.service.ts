@@ -8,16 +8,16 @@ import {usersTable,clientsTable,authorizationCodesTable} from "../../../db/schem
 import { eq } from "drizzle-orm";
 import * as jwtutil from "../../../common/utils/jwt-utility.js";
 
-const register=async({clientId,firstName,lastName,email,password}:RegisterDto)=>{
+const register=async({client_id,firstName,lastName,email,password}:RegisterDto)=>{
 
 
-    const client =await db.select().from(clientsTable).where(eq(clientsTable.id,clientId)).limit(1);
+    const client =await db.select().from(clientsTable).where(eq(clientsTable.id,client_id));
     if(client.length===0){
         throw ApiError.badRequest('Client not found');
     }
 
 
-    const existinfUser=await db.select().from(usersTable).where(eq(usersTable.email,email)).limit(1)
+    const existinfUser=await db.select().from(usersTable).where(eq(usersTable.email,email))
 
     if(existinfUser.length>0){
         throw ApiError.badRequest('User already exists');
@@ -39,7 +39,7 @@ const register=async({clientId,firstName,lastName,email,password}:RegisterDto)=>
     await db.insert(authorizationCodesTable).values({
         code:hashedShortCode,
         codeExpiry:new Date(Date.now()+60*60*1000),
-        userId:userId[0]?.id
+        userId:userId[0]!.id
     })
 
     return shortCode;
@@ -48,14 +48,14 @@ const register=async({clientId,firstName,lastName,email,password}:RegisterDto)=>
 
 
 
-const login=async({clientId,email,password}:LoginDto)=>{
+const login=async({client_id,email,password}:LoginDto)=>{
     
-    const client =await db.select().from(clientsTable).where(eq(clientsTable.id,clientId)).limit(1);
+    const client =await db.select().from(clientsTable).where(eq(clientsTable.id,client_id));
     if(client.length===0){
         throw ApiError.badRequest('Client not found');
     }
     
-    const user=await db.select().from(usersTable).where(eq(usersTable.email,email)).limit(1)
+    const user=await db.select().from(usersTable).where(eq(usersTable.email,email))
     
 
     if(!user || user.length===0){
@@ -79,7 +79,7 @@ const login=async({clientId,email,password}:LoginDto)=>{
     await db.insert(authorizationCodesTable).values({
         code:hashedShortCode,
         codeExpiry:new Date(Date.now()+60*60*1000),
-        userId:user[0]?.id
+        userId:user[0]!.id
     })
     return shortCode;
     
@@ -94,11 +94,11 @@ const logout=async(userId:string)=>{
 
 const refresh=async({user_id,client_id}:any)=>{
     
-    const client =await db.select().from(clientsTable).where(eq(clientsTable.id,client_id)).limit(1);
+    const client =await db.select().from(clientsTable).where(eq(clientsTable.id,client_id));
     if(client.length===0){
         throw ApiError.badRequest('Client not found');
     }
-    const user=await db.select().from(usersTable).where(eq(usersTable.id,user_id)).limit(1)
+    const user=await db.select().from(usersTable).where(eq(usersTable.id,user_id))
     
     if(!user || user.length===0){
         throw ApiError.badRequest('User not found');
@@ -115,7 +115,7 @@ const refresh=async({user_id,client_id}:any)=>{
     await db.insert(authorizationCodesTable).values({
         code:hashedShortCode,
         codeExpiry:new Date(Date.now()+60*60*1000),
-        userId:user[0]?.id
+        userId:user[0]!.id
     })
     return shortCode;
 

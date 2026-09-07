@@ -9,6 +9,8 @@ dotenv.config({path: '.env'});
 
 export const db = drizzle(process.env.DATABASE_URL as string);
 
+
+
 const PORT=process.env.PORT || 8000;
 
 

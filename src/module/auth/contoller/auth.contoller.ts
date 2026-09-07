@@ -4,12 +4,13 @@ import ApiResponse from '../../../common/utils/apiresonse.js';
 
 const register=async(req:Request,res:Response)=>{
     const shortCode=await authService.register(req.body);
-    ApiResponse.redirect(res,`${req.body.redirectUri}?code=${shortCode}`);
+    console.log("shortcode",shortCode)
+    ApiResponse.redirect(res,`${req.body.redirect_uri}?code=${shortCode}`);
 }
 
 const login=async(req:Request,res:Response)=>{
     const shortCode=await authService.login(req.body);
-    ApiResponse.redirect(res,`${req.body.redirectUri}?code=${shortCode}`);
+    ApiResponse.redirect(res,`${req.body.redirect_uri}?code=${shortCode}`);
 }
 
 
@@ -19,7 +20,7 @@ const logout=async(req:Request,res:Response)=>{
 }
 
 const refresh=async(req:Request,res:Response)=>{
-    const shortCode=await authService.refresh(req.body);
+    const shortCode=await authService.refresh({userId:req.user?.id,...req.body,});
     ApiResponse.ok(res,shortCode);
 }
 

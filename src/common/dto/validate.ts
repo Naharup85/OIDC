@@ -7,6 +7,7 @@ export function validate(schema:z.ZodType<any>){
         try{
             const result=await schema.safeParseAsync(req.body);
             if(!result.success){
+                console.log(result.error.issues);
                 throw ApiError.badRequest(JSON.stringify(result.error.issues));
             }
             req.body=result.data;

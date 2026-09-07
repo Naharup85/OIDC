@@ -292,7 +292,7 @@
                 </div>
                 <button type="submit" class="btn">
                     <div class="spinner" id="spinner"></div>
-                    <span class="btn-text">Sign Up</span>
+                    <span class="btn-text" id="btn-text">Sign Up</span>
                 </button>
             </form>
             <div class="footer">
@@ -330,7 +330,6 @@
         function toggleLoading(isLoading){
             spinner.style.display=isLoading ? "block" : "none";
             btnText.style.display=isLoading ? "none" : "block";
-            btn
         }
 
         form.addEventListener("submit",async (e)=>{
@@ -345,6 +344,7 @@
             hideError();
             toggleLoading(true);
 
+            const params = new URLSearchParams(window.location.search);
             try{
                 const res=await fetch(`${window.location.origin}/api/auth/signup`,{
                     method:"POST",
@@ -360,10 +360,11 @@
                         redirect_uri:params.get("redirect_uri"),
                     }),
                 });
+                console.log(res)
 
                 if(!res.ok){
                     const errorData=await res.json();
-                    throw new Error(errorData.message);
+                    showError(errorData.message);
                 }else if(data.redirect){
                     window.location.href=data.redirect;
                 }else{

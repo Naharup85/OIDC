@@ -18,6 +18,9 @@ const authenticate=async (req:Request,res:Response,next:NextFunction)=>{
     
     const decodedToken=jwtUtils.verifyAccessToken(token!);
 
+    if(typeof decodedToken === 'string'){
+        throw ApiError.unauthorized("You are not authorized to perform this action");
+    }
    const [user]=await db.select().from(usersTable)
    .where(eq(usersTable.id,decodedToken.id)).limit(1)
    
