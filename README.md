@@ -56,22 +56,22 @@ A lightweight, modern, and type-safe OpenID Connect (OIDC) & OAuth 2.0 Identity 
 ## 🔄 Architecture & Flow
 
 ```mermaid
-sequenceDiagram
-    autonumber
-    actor User as User / Browser
-    participant Client as Client Application
-    participant OIDC as NAuth OIDC Server
-    participant DB as PostgreSQL (Drizzle)
-
-    Client->>User: Redirect to /authenticate?client_id=...&redirect_uri=...
-    User->>OIDC: GET /authenticate (Login UI rendered)
-    User->>OIDC: POST /api/auth/login (Credentials + Client ID)
-    OIDC->>DB: Validate user & client; issue short-lived code
-    DB-->>OIDC: Code stored (SHA-256 hashed)
-    OIDC-->>User: 302 Redirect to redirect_uri?code={code}
-    User->>Client: Navigate to redirect_uri with code
-    Client->>OIDC: POST /token (Exchange code for tokens) [Roadmap]
-    OIDC-->>Client: Access Token + ID Token + Refresh Token
+    sequenceDiagram
+        autonumber
+        actor User as User / Browser
+        participant Client as Client Application
+        participant OIDC as NAuth OIDC Server
+        participant DB as PostgreSQL (Drizzle)
+    
+        Client->>User: Redirect to /authenticate?client_id=...&redirect_uri=...
+        User->>OIDC: GET /authenticate (Login UI rendered)
+        User->>OIDC: POST /api/auth/login (Credentials + Client ID)
+        OIDC->>DB: Validate user & client; issue short-lived code
+        DB-->>OIDC: Code stored (SHA-256 hashed)
+        OIDC-->>User: 302 Redirect to redirect_uri?code={code}
+        User->>Client: Navigate to redirect_uri with code
+        Client->>OIDC: POST /token (Exchange code for tokens) [Roadmap]
+        OIDC-->>Client: Access Token + ID Token + Refresh Token
 ```
 
 ---
